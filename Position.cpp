@@ -41,6 +41,32 @@ void Position::set_path(Path& p) {
     }
 }
 
+bool Position::has_path(int p) {
+    for (int i = 0; i < 3; i++) {
+        if (paths[i] != nullptr) {
+            if (paths[i]->get_owner() == p) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+bool Position::no_neighbors() {
+    for (int i = 0; i < 3; i++) {
+        if (paths[i] != nullptr) {
+            if (paths[i]->get_position(0)->get_owner() != 0 ||
+                paths[i]->get_position(1)->get_owner() != 0) {
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
+Path* Position::get_path(int p) {
+    return paths[p];
+}
+
 int Position::get_owner() {
     return owner;
 }
@@ -49,7 +75,7 @@ int Position::get_number() {
     return position_num;
 }
 
-string Position::get_tiles() {
+string Position::print_tiles() {
     string s = tiles[0]->get_land() + "," + to_string(tiles[0]->get_number());
     if (tiles[1] != nullptr) {
         s = s + "," + tiles[1]->get_land() + "," +

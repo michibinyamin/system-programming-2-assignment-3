@@ -42,5 +42,12 @@ int main()
     Catan* game = new Catan(&p1,&p2,&p3,tiles);
     game->Get_Board()->print_board();
     
-    
+    p1.placeSettelemnt(0); // Counting 3 first moves, must place first a settelment
+    p1.placeRoad(6);
+    p1.placeRoad(11);   
+    p1.placeRoad(19);
+    p1.placeSettelemnt(18);
+
+    p1.placeRoad(30);
+    p1.placeSettelemnt(51);
 }

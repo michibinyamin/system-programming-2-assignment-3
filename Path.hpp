@@ -11,7 +11,7 @@ class Position;  // Forward declaration of position
 
 class Path {
 private:
-    int number;  // Indicating which path it is
+    int number;  // Indicating which path it is representing on the board
     int owner;   // Indicates to who the path belongs
     Position* positions[2];
 
@@ -23,10 +23,14 @@ public:
 
     // Getter methods
     int get_number();
-    int get_player();
+    int get_owner();
+    bool has_position(int p);   // Checks if this path has a position which belongs to p
+    bool has_neighbors(int p);  // Return true if this path has neighbor paths which belong to p
+    Position* get_position(int p);
 
     // Setter methods
     void set_position(Position* p);
+    void set_owner(int n);
 
     // Destructor
     ~Path();

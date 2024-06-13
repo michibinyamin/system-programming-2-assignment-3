@@ -9,12 +9,15 @@
 
 Catan::Catan(Player* p1, Player* p2, Player* p3, Tile* new_tiles) {
     player1 = p1;
+    player1->set_num(1);
     player1->set_game(this);
 
     player2 = p2;
+    player2->set_num(2);
     player2->set_game(this);
 
     player3 = p3;
+    player3->set_num(3);
     player3->set_game(this);
 
     board = new Board(new_tiles);

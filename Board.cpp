@@ -69,144 +69,192 @@ position_data positions_data[] = {
     {53, {65,71,-1}, {18,-1,-1}}
 };
 
-    Board::Board(Tile new_tile[19])
-    {
-        // Copy elements individually or use std::copy to avoid direct assignment
-        for (int i = 0; i < 19; ++i){
-            tiles[i] = new_tile[i];
-        }
-        init_board();
+Board::Board(Tile new_tile[19])
+{
+    // Copy elements individually or use std::copy to avoid direct assignment
+    for (int i = 0; i < 19; ++i){
+        tiles[i] = new_tile[i];
     }
-    void Board::init_board()
+    init_board();
+}
+Board::~Board() {
+}
+void Board::init_board()
+{
+    // Init positions 
+    for (int i = 0; i < 54; i++)
     {
-        // Init positions 
-        for (int i = 0; i < 54; i++)
+        positions[i].set_number(i);
+        for (int j = 0; j < 3; j++)
         {
-            positions[i].set_number(i);
-            for (int j = 0; j < 3; j++)
+            // Connect Paths to position and connect the corrosponding positions to the paths
+            if (positions_data[i].Dpaths[j] != -1)
             {
-                // Connect Paths to position and connect the corrosponding positions to the paths
-                if (positions_data[i].Dpaths[j] != -1)
-                {
-                    int PathIdx = positions_data[i].Dpaths[j];
-                    positions[i].set_path(paths[PathIdx]);
-                    paths[PathIdx].set_position(&positions[i]);
-                }
+                int PathIdx = positions_data[i].Dpaths[j];
+                positions[i].set_path(paths[PathIdx]);
+                paths[PathIdx].set_position(&positions[i]);
+            }
 
-                // Connect tiles to the postions
-                if (positions_data[i].DTiles[j] != -1)
-                {
-                    int TileIdx = positions_data[i].DTiles[j];
-                    positions[i].set_tiles(&tiles[TileIdx]);
-                }
+            // Connect tiles to the postions
+            if (positions_data[i].DTiles[j] != -1)
+            {
+                int TileIdx = positions_data[i].DTiles[j];
+                positions[i].set_tiles(&tiles[TileIdx]);
             }
         }
     }
+}
+
+bool Board::set_position(int p, int owner){
+    // At least one of them has a path + no neighboring settelment + no
+    // settelment in current spot
+    if (p < 0 || p > 53)
+    {
+        return false;
+    }
+    Position* position = get_position(p);
+    if (position->has_path(owner) && position->no_neighbors() && position->get_owner() == 0) 
+    {
+        position->set_owner(owner);
+        return true;
+    }
     
-    void Board::print_board()
+    return false;
+}
+
+bool Board::set_position_initial(int p, int owner){
+    if (p < 0 || p > 53) {
+        return false;
+    }
+    Position* position = get_position(p);
+    if (position->get_owner() == 0 && position->no_neighbors()) {
+        position->set_owner(owner);
+        return true;
+    }
+    return false;
+}
+
+bool Board::set_path(int p, int owner){
+    // 
+    if (p < 0 || p > 71) {
+        return false;
+    }
+    Path* path = get_path(p);
+    if (path->get_owner() == 0 && (path->has_position(owner) || path->has_neighbors(owner)) )
     {
-        cout << "         ";
-        for (int i = 0; i < 3; i++)
-        {
-            
-            cout << tiles[i].get_land() <<","<< to_string(tiles[i].get_number());
-            cout << "  ";
-        }
-        cout << "\n";
+        path->set_owner(owner);
+        return true;
+    }
 
-        cout << "    ";
-        for (int i = 3; i < 7; i++)
-        {
-            cout << tiles[i].get_land() <<","<< to_string(tiles[i].get_number());
-            cout << "  ";
-        }
-        cout << "\n";
+    return false;
+}
 
-        for (int i = 7; i < 12; i++)
-        {
-            cout << tiles[i].get_land() <<","<< to_string(tiles[i].get_number());
-            cout << "  ";
-        }
-        cout << "\n";
+Position* Board::get_position(int p){
+    return &positions[p];
+}
 
-        cout << "    ";
-        for (int i = 12; i < 16; i++)
-        {
-            cout << tiles[i].get_land() <<","<< to_string(tiles[i].get_number());
-            cout << "  ";
-        }
-        cout << "\n";
-        cout << "         ";
+Path* Board::get_path(int p){
+    return &paths[p];
+}
 
-        for (int i = 16; i < 19; i++)
-        {
-            cout << tiles[i].get_land() <<","<< to_string(tiles[i].get_number());
-            cout << "  ";
-        }
-        cout<<"\n";
-
-
-        cout<<"                       -::::           .::::.           :::::                       \n";                    
-        cout<<"                    -:      .-:     .-.      .=:     :=.      :-                    \n";             
-        cout<<"                 :-             -.-:            .- =.            :-                 \n";             
-        cout<<"                 -.             ::-              -.-              +                 \n";             
-        cout<<"                 -.             ::-              -.-              +                 \n";         
-        cout <<"                     "<< tiles[0].get_land() <<","<< to_string(tiles[0].get_number());      
-        cout <<"        "<< tiles[1].get_land() <<","<< to_string(tiles[1].get_number()); 
-        cout <<"        "<< tiles[2].get_land() <<","<< to_string(tiles[2].get_number())<<"\n"; 
-        cout<<"                 -.             ::-              -.-              +                 \n"; 
-        cout<<"                 .-.           :-.:-.           :: -:           .-:                 \n";
-        cout<<"                ::  .=.     :-.  -:  :-      --  .=.  -:      =:  ::                \n";
-        cout<<"            .:-    -:. .-:-. .:-   .-:. ::::. .:.   ::. .-::: .:-    -:.            \n";
-        cout<<"         .::.         .:: ::.         .::. ::.         .:: .::.         .-.         \n";
-        cout<<"         .              ...              :-              .-:              ..        \n";
-        cout<<"         .              ...              :-              .-:              ..        \n";
-        cout <<"            "<< tiles[3].get_land() <<","<< to_string(tiles[3].get_number());      
-        cout <<"        "<< tiles[4].get_land() <<","<< to_string(tiles[4].get_number()); 
-        cout <<"       "<< tiles[5].get_land() <<","<< to_string(tiles[5].get_number()); 
-        cout <<"      "<< tiles[6].get_land() <<","<< to_string(tiles[6].get_number())<<"\n"; 
-        cout<<"         .              ...              :-              .-:              ..        \n";
-        cout<<"         .              ...              ::.             .::              :.        \n";
-        cout<<"        . .::.       ::. . .::       .::. . ::.       .:: . .::.       ::. .        \n";
-        cout<<"     .-...:- .:-. -:. :-...-: .:: .-:  -:...-. .-. ::. .-. .:- .:- .-:. ::...-:     \n";
-        cout<<" .=.        ::    :-        .=.    -:        .-.   .=.        -:    :-        .=.   \n";
-        cout<<"-              =-.             ::=              -.=              +..             .: \n";
-        cout<<":              --.             ::-              - -              +..             .. \n";
-        cout <<"    "<< tiles[7].get_land() <<","<< to_string(tiles[7].get_number());      
-        cout <<"         "<< tiles[8].get_land() <<","<< to_string(tiles[8].get_number()); 
-        cout <<"        "<< tiles[9].get_land() <<","<< to_string(tiles[9].get_number()); 
-        cout <<"         "<< tiles[10].get_land() <<","<< to_string(tiles[10].get_number()); 
-        cout <<"        "<< tiles[11].get_land() <<","<< to_string(tiles[11].get_number())<<"\n"; 
-        cout<<":              --.             ::-              - -              +..             .. \n";
-        cout<<":              --.             ::-              - -              +..             .. \n";
-        cout<<".-:          -:  :=.         .-.  :-          :-. .-.          -:  :=          .=.  \n";
-        cout<<"   .-:   .-- .:--:. :-.   .-. .:--:  -:.   :-  .-:-. .-:   .-- .:--:. :-.   .-.     \n";
-        cout<<"      .:: .::      ::. .:. .::     .::. ::..::.     .::..:: .::      ::. ::.        \n";
-        cout<<"        :.            .:.:.            .:::            .-::.            .-          \n";
-        cout<<"        .               ..              :-              .-:              ..         \n";
-        cout<<"        .              ...              :-              .-:              ..         \n";
-        cout <<"            "<< tiles[12].get_land() <<","<< to_string(tiles[12].get_number());      
-        cout <<"         "<< tiles[13].get_land() <<","<< to_string(tiles[13].get_number()); 
-        cout <<"       "<< tiles[14].get_land() <<","<< to_string(tiles[14].get_number()); 
-        cout <<"     "<< tiles[15].get_land() <<","<< to_string(tiles[15].get_number())<<"\n"; 
-        cout<<"        .              ...              :-              .-:              ..         \n";
-        cout<<"        ::.           .:.:.           .::.:.           .-.::.          ..:          \n";
-        cout<<"          .::.     ::.:::::.::     .::.::::..::     ::.:::::.::.     ::.            \n";
-        cout<<"              .--: :-.     .-..:-=..-:      .=..---..=.      :-.:=-:                \n";
-        cout<<"                :-            .-.--            :- =.            --                  \n";
-        cout<<"                -.             ::-              - -              +                  \n";
-        cout<<"                -.             ::-              - -              +                  \n";
-        cout <<"                    "<< tiles[16].get_land() <<","<< to_string(tiles[16].get_number());      
-        cout <<"        "<< tiles[17].get_land() <<","<< to_string(tiles[17].get_number()); 
-        cout <<"        "<< tiles[18].get_land() <<","<< to_string(tiles[18].get_number())<<"\n"; 
-        cout<<"                -.             ::-              - -              +                  \n";
-        cout<<"                :-            .-.::            :- -.            --                  \n";
-        cout<<"                   .-      .=.      --      :=.     .=:      --                     \n";
-        cout<<"                      :::-.            :::-.           .-:::                        \n";
-
-
-        }
-
-    Board::~Board()
+void Board::print_board()
+{
+    cout << "         ";
+    for (int i = 0; i < 3; i++)
     {
+        
+        cout << tiles[i].get_land() <<","<< to_string(tiles[i].get_number());
+        cout << "  ";
+    }
+    cout << "\n";
+
+    cout << "    ";
+    for (int i = 3; i < 7; i++)
+    {
+        cout << tiles[i].get_land() <<","<< to_string(tiles[i].get_number());
+        cout << "  ";
+    }
+    cout << "\n";
+
+    for (int i = 7; i < 12; i++)
+    {
+        cout << tiles[i].get_land() <<","<< to_string(tiles[i].get_number());
+        cout << "  ";
+    }
+    cout << "\n";
+
+    cout << "    ";
+    for (int i = 12; i < 16; i++)
+    {
+        cout << tiles[i].get_land() <<","<< to_string(tiles[i].get_number());
+        cout << "  ";
+    }
+    cout << "\n";
+    cout << "         ";
+
+    for (int i = 16; i < 19; i++)
+    {
+        cout << tiles[i].get_land() <<","<< to_string(tiles[i].get_number());
+        cout << "  ";
+    }
+    cout<<"\n";
+
+
+    cout<<"                       -::::           .::::.           :::::                       \n";                    
+    cout<<"                    -:      .-:     .-.      .=:     :=.      :-                    \n";             
+    cout<<"                 :-             -.-:            .- =.            :-                 \n";             
+    cout<<"                 -.             ::-              -.-              +                 \n";             
+    cout<<"                 -.             ::-              -.-              +                 \n";         
+    cout <<"                     "<< tiles[0].get_land() <<","<< to_string(tiles[0].get_number());      
+    cout <<"        "<< tiles[1].get_land() <<","<< to_string(tiles[1].get_number()); 
+    cout <<"        "<< tiles[2].get_land() <<","<< to_string(tiles[2].get_number())<<"\n"; 
+    cout<<"                 -.             ::-              -.-              +                 \n"; 
+    cout<<"                 .-.           :-.:-.           :: -:           .-:                 \n";
+    cout<<"                ::  .=.     :-.  -:  :-      --  .=.  -:      =:  ::                \n";
+    cout<<"            .:-    -:. .-:-. .:-   .-:. ::::. .:.   ::. .-::: .:-    -:.            \n";
+    cout<<"         .::.         .:: ::.         .::. ::.         .:: .::.         .-.         \n";
+    cout<<"         .              ...              :-              .-:              ..        \n";
+    cout<<"         .              ...              :-              .-:              ..        \n";
+    cout <<"            "<< tiles[3].get_land() <<","<< to_string(tiles[3].get_number());      
+    cout <<"        "<< tiles[4].get_land() <<","<< to_string(tiles[4].get_number()); 
+    cout <<"       "<< tiles[5].get_land() <<","<< to_string(tiles[5].get_number()); 
+    cout <<"      "<< tiles[6].get_land() <<","<< to_string(tiles[6].get_number())<<"\n"; 
+    cout<<"         .              ...              :-              .-:              ..        \n";
+    cout<<"         .              ...              ::.             .::              :.        \n";
+    cout<<"        . .::.       ::. . .::       .::. . ::.       .:: . .::.       ::. .        \n";
+    cout<<"     .-...:- .:-. -:. :-...-: .:: .-:  -:...-. .-. ::. .-. .:- .:- .-:. ::...-:     \n";
+    cout<<" .=.        ::    :-        .=.    -:        .-.   .=.        -:    :-        .=.   \n";
+    cout<<"-              =-.             ::=              -.=              +..             .: \n";
+    cout<<":              --.             ::-              - -              +..             .. \n";
+    cout <<"    "<< tiles[7].get_land() <<","<< to_string(tiles[7].get_number());      
+    cout <<"         "<< tiles[8].get_land() <<","<< to_string(tiles[8].get_number()); 
+    cout <<"        "<< tiles[9].get_land() <<","<< to_string(tiles[9].get_number()); 
+    cout <<"         "<< tiles[10].get_land() <<","<< to_string(tiles[10].get_number()); 
+    cout <<"        "<< tiles[11].get_land() <<","<< to_string(tiles[11].get_number())<<"\n"; 
+    cout<<":              --.             ::-              - -              +..             .. \n";
+    cout<<":              --.             ::-              - -              +..             .. \n";
+    cout<<".-:          -:  :=.         .-.  :-          :-. .-.          -:  :=          .=.  \n";
+    cout<<"   .-:   .-- .:--:. :-.   .-. .:--:  -:.   :-  .-:-. .-:   .-- .:--:. :-.   .-.     \n";
+    cout<<"      .:: .::      ::. .:. .::     .::. ::..::.     .::..:: .::      ::. ::.        \n";
+    cout<<"        :.            .:.:.            .:::            .-::.            .-          \n";
+    cout<<"        .               ..              :-              .-:              ..         \n";
+    cout<<"        .              ...              :-              .-:              ..         \n";
+    cout <<"            "<< tiles[12].get_land() <<","<< to_string(tiles[12].get_number());      
+    cout <<"         "<< tiles[13].get_land() <<","<< to_string(tiles[13].get_number()); 
+    cout <<"       "<< tiles[14].get_land() <<","<< to_string(tiles[14].get_number()); 
+    cout <<"     "<< tiles[15].get_land() <<","<< to_string(tiles[15].get_number())<<"\n"; 
+    cout<<"        .              ...              :-              .-:              ..         \n";
+    cout<<"        ::.           .:.:.           .::.:.           .-.::.          ..:          \n";
+    cout<<"          .::.     ::.:::::.::     .::.::::..::     ::.:::::.::.     ::.            \n";
+    cout<<"              .--: :-.     .-..:-=..-:      .=..---..=.      :-.:=-:                \n";
+    cout<<"                :-            .-.--            :- =.            --                  \n";
+    cout<<"                -.             ::-              - -              +                  \n";
+    cout<<"                -.             ::-              - -              +                  \n";
+    cout <<"                    "<< tiles[16].get_land() <<","<< to_string(tiles[16].get_number());      
+    cout <<"        "<< tiles[17].get_land() <<","<< to_string(tiles[17].get_number()); 
+    cout <<"        "<< tiles[18].get_land() <<","<< to_string(tiles[18].get_number())<<"\n"; 
+    cout<<"                -.             ::-              - -              +                  \n";
+    cout<<"                :-            .-.::            :- -.            --                  \n";
+    cout<<"                   .-      .=.      --      :=.     .=:      --                     \n";
+    cout<<"                      :::-.            :::-.           .-:::                        \n";
     }

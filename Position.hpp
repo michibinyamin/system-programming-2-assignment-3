@@ -29,9 +29,12 @@ public:
     void set_owner(int player);
     void set_tiles(Tile* t);  // Set a tile
     void set_path(Path& p);   // Set a num
+    Path* get_path(int p);
     int get_owner();
     int get_number();
-    string get_tiles();
+    bool has_path(int p);        // Returns true if this position has a path that belongs to p
+    bool no_neighbors();         // Returns true if this position does not have any neighbors(other settelments)
+    string print_tiles();
 };
 
 #endif  // Position_HPP

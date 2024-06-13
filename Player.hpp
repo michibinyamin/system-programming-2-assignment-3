@@ -6,6 +6,7 @@
 
 #include <iostream>
 #include <string>
+#include "Position.hpp"
 
 class Catan;
 
@@ -14,6 +15,9 @@ using namespace std;
 class Player {
 private:
     string name;
+    int player_num;
+    int roads;       // how many roads were built
+    int settelment;  // how many settelments were built
     Catan* game;
 
 public:
@@ -23,6 +27,9 @@ public:
     void set_game(Catan* p) {
         game = p;
     }
-    string getname();
+    void set_num(int n);    // This will be the players id in the game
+    string getname();   // Reterns player name
+    bool placeSettelemnt(int position); // Place a settelment on a position
+    bool placeRoad(int road);       // Place a road on a path
 };
 #endif  // PLAYER_HPP

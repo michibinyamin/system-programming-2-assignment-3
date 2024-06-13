@@ -23,12 +23,20 @@ private:
 public:
     // Init the board according to the list
     Board(Tile *new_tile);  // Recieves a list of tiles to initialize and create
-                            // the board
+    // Relese the board
+    ~Board();
+
+    bool set_position(int p, int owner);    // Sets a new owner in position p (if owners road connects)
+    bool set_position_initial(int p,int owner);  // Sets a new owner in position p (no need for road connecting)
+    bool set_path(int p, int owner);    // Sets a new owner on path p (if legal)
+    Position* get_position(int p);  // Get position on p
+    Path* get_path(int p);  // Get path on p
 
     void print_board();
 
-    // Relese the board
-    ~Board();
+
+
+    
 };
 
 #endif  // BOARD_HPP

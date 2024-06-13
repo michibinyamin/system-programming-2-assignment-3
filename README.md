@@ -8,11 +8,15 @@ objects :
 - catan
 - board
 - player
-- dice
 - tile
-- settelment
-- path
-- card (פיתוח)
+- position (where we put settelments)
+- path (where we put roads)
+- card
+- development card (card)
+- resources card (card)
+- dice
+
+
 - night
 - victory win
 - build two roards
@@ -24,6 +28,9 @@ how will a player choose a road\settelment positions :
 - settalment - a number representing the position on the board
 - road - a number representing the road on the board
 
+Catan : 
+- 3 players
+- board
 
 Tile :
 - land (sea, desert, forest, )
@@ -44,13 +51,13 @@ Position : (a class which represents a vertex on the graph)
 
 
 board :
-- a list of vertecies
-- a list of paths
-- a list of tiles
+- a list of vertecies   (54)
+- a list of paths       (72)
+- a list of tiles       (19)
 - init method which initializes the board accourding to a list of tiles that it gets
 
 player :
-- 
+- instance of the board
 
 
 
