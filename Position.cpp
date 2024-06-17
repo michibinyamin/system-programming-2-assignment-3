@@ -24,7 +24,7 @@ void Position::set_owner(int player) {
 }
 void Position::set_tiles(Tile* t) {
     for (int i = 0; i < 3; ++i) {
-        if (tiles[i] == NULL)  // If not initialized
+        if (tiles[i] == nullptr)  // If not initialized
         {
             tiles[i] = t;
             return;
@@ -33,7 +33,7 @@ void Position::set_tiles(Tile* t) {
 }
 void Position::set_path(Path& p) {
     for (int i = 0; i < 3; ++i) {
-        if (paths[i] == NULL)  // If not initialized
+        if (paths[i] == nullptr)  // If not initialized
         {
             paths[i] = &p;
             return;
@@ -65,6 +65,10 @@ bool Position::no_neighbors() {
 
 Path* Position::get_path(int p) {
     return paths[p];
+}
+
+Tile** Position::get_tiles() {
+    return tiles;
 }
 
 int Position::get_owner() {

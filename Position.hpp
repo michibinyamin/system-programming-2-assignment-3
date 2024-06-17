@@ -20,8 +20,7 @@ private:
     Path* paths[3];  // Indicates who has a road on a given path, 0 - no one
     Tile* tiles[3];  // The Tiles sarounding the vertex
 
-public:
-    Position();
+public : Position();
     Position(int position_number);
     ~Position();  //  todo - delete position and tiles
 
@@ -29,9 +28,10 @@ public:
     void set_owner(int player);
     void set_tiles(Tile* t);  // Set a tile
     void set_path(Path& p);   // Set a num
-    Path* get_path(int p);
-    int get_owner();
-    int get_number();
+    Path* get_path(int p);    // Return path p
+    Tile** get_tiles();    // Return tile t
+    int get_owner();    // Get the owner of the path
+    int get_number();   // Get the number that represents the path
     bool has_path(int p);        // Returns true if this position has a path that belongs to p
     bool no_neighbors();         // Returns true if this position does not have any neighbors(other settelments)
     string print_tiles();
