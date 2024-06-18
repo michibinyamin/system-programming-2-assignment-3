@@ -16,8 +16,8 @@ class VictoryPointCard : public DevelopmentCard{
 
 public:
     VictoryPointCard(Catan* g);
-    void action(Player* p) override;  // Use the card (should be overritten)
+    void action(Player* p);         // Use the card (should be overritten)
+    void print_card() override;     // Overides and prints its details
 };
-
 
 #endif

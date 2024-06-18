@@ -14,6 +14,7 @@ objects :
 - card
 - development card (card) פיתוח
 - resources card (card) משאב
+- monopoly card (card)
 
 
 - night

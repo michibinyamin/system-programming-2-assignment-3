@@ -1,7 +1,7 @@
 CC = clang++
 CFLAGS = -Wall -std=c++17
 
-SRCS = Board.cpp Catan.cpp Path.cpp Player.cpp Position.cpp Tile.cpp DevelopmentCard.cpp VictoryPointCard.cpp main.cpp
+SRCS = Board.cpp Catan.cpp Path.cpp Player.cpp Position.cpp Tile.cpp DevelopmentCard.cpp VictoryPointCard.cpp MonopolyCard.cpp YearOfPlentyCard.cpp main.cpp
 OBJS = $(SRCS:.cpp=.o)
 OUT = Catan
 

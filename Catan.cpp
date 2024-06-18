@@ -26,7 +26,14 @@ Catan::Catan(Player* p1, Player* p2, Player* p3, Tile* new_tiles) {
     {
         DevelopmentCards.push_back(new VictoryPointCard(this));
     }
-    // Add more!!
+
+    for (size_t i = 0; i < 2; i++) {
+        DevelopmentCards.push_back(new MonopolyCard(this));
+    }
+
+    for (size_t i = 0; i < 2; i++) {
+        DevelopmentCards.push_back(new YearOfPlentyCard(this));
+    }
     
     turn = 1;  // Player one starts
 }
@@ -40,10 +47,10 @@ void Catan::Dice_roled(int result){
 void Catan::Next_Turn() { 
     if(turn == 3){turn = 1;}
     else{turn++;}
-    cout << "\n"+Get_Turn() + "'s turn : \n";
+    cout << "\n" + Get_Turn_name() + "'s turn : \n";
 }
 
-string Catan::Get_Turn() {
+string Catan::Get_Turn_name() {
     if (turn == 1)
     {
         return player1->getname();
@@ -59,6 +66,10 @@ string Catan::Get_Turn() {
     }
 }
 
+int Catan::Get_Turn_number(){
+    return turn;
+}
+
 DevelopmentCard* Catan::Get_card(){
     int size = DevelopmentCards.size();
     random_device rd;
@@ -68,6 +79,15 @@ DevelopmentCard* Catan::Get_card(){
     DevelopmentCard* d = DevelopmentCards.at(num);
     DevelopmentCards.erase(DevelopmentCards.begin()+num);
     return d;
+}
+
+// we dont care that it steals from p the resources, it comes back to him
+int Catan::monopoly(Player* p, string resource){
+    int amount = 0;
+    amount += player1->steal_resources(resource);
+    amount += player2->steal_resources(resource);
+    amount += player3->steal_resources(resource);
+    return amount;
 }
 
 Board* Catan::Get_Board() {

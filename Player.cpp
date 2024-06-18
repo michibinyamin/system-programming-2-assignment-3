@@ -34,7 +34,7 @@ string Player::getname() {
 
 void Player::Roll_dice() {
     if (!My_turn()) {
-        cout << "Not your turn, it is " << game->Get_Turn() << "'s turn\n";
+        cout << "Not your turn, it is " << game->Get_Turn_name() << "'s turn\n";
         return;
     }
     if(rolled) {
@@ -55,7 +55,7 @@ void Player::Roll_dice() {
 
 bool Player::placeSettelemnt(int p) {
     if (!My_turn()) {
-        cout << "Not your turn, it is " << game->Get_Turn() << "'s turn\n";
+        cout << "Not your turn, it is " << game->Get_Turn_name() << "'s turn\n";
         return false;
     }
 
@@ -119,7 +119,7 @@ bool Player::placeSettelemnt(int p) {
 
 bool Player::placeRoad(int p) {
     if (!My_turn()) {
-        cout << "Not your turn, it is " << game->Get_Turn() << "'s turn\n";
+        cout << "Not your turn, it is " << game->Get_Turn_name() << "'s turn\n";
         return false;
     }
     if (roads <= 2) {
@@ -215,26 +215,162 @@ bool Player::Buy_card() {
     }
     DevelopmentCard* card = game->Get_card();
     Development_cards.push_back(card);
-    cout << "you got The card : " << card->Get_name();
+    cout << "you got The card : " << card->Get_name() << "\n";
     return true;
 }
 
+// Used for victory point (more can be added to here)
 bool Player::Use_card(string card_name) {
     for (int i = 0; i < Development_cards.size(); i++)
     {
         if(Development_cards.at(i)->Get_name() == card_name){
-            Development_cards.at(i)->action(this);
-            Development_cards.erase(Development_cards.begin()+i);
-            cout << "Succesfully used " << card_name << " card\n";
-            return true;
+            if (card_name == "Victory point")
+            {
+                VictoryPointCard* card = dynamic_cast<VictoryPointCard*>(Development_cards.at(i));       // Downcasting
+                card->action(this);
+                Development_cards.erase(Development_cards.begin()+i);
+                cout << "Succesfully used " << card_name << " card\n";
+                return true;
+            } else {
+                throw runtime_error("Error with deck \n");
+            }
         }
     }
     cout << "You do not have this card!\n";
     return false;
 }
 
+// Used for Year of plenty (more can be added to here)
+bool Player::Use_card(string card_name, string resource1, string resource2) {
+    for (int i = 0; i < Development_cards.size(); i++) {
+        if (Development_cards.at(i)->Get_name() == card_name) {
+            if (card_name == "Year of plenty") {
+                YearOfPlentyCard* card = dynamic_cast<YearOfPlentyCard*>(Development_cards.at(i));  // Downcasting
+                if(card->action(this, resource1, resource2)){
+                    Development_cards.erase(Development_cards.begin() + i);
+                    cout << "Succesfully used " << card_name << " card\n";
+                    return true;
+                }
+                else{
+                    return false;
+                }
+                
+                
+            } else {
+                throw runtime_error("Error with deck");
+            }
+        }
+    }
+    cout << "You do not have this card!\n";
+    return false;
+}
+
+// Used for Monopoly (more can be added to here)
+bool Player::Use_card(string card_name, string resource) {
+    for (int i = 0; i < Development_cards.size(); i++) {
+        if (Development_cards.at(i)->Get_name() == card_name) {
+            if (card_name == "Monopoly") {
+                MonopolyCard* card =
+                dynamic_cast<MonopolyCard*>(Development_cards.at(i));  // Downcasting
+                if (card->action(this, resource))
+                {
+                    Development_cards.erase(Development_cards.begin() + i);
+                    cout << "Succesfully used " << card_name << " card\n";
+                    return true;
+                }
+                else{
+                    return false;
+                }
+            } else {
+                throw runtime_error("Error with deck");
+            }
+        }
+    }
+    cout << "You do not have this card!\n";
+    return false;
+}
+
+bool Player::achive_resource(string res, int times){
+    if (res == "forest")
+    {
+        forest += times;
+    }
+    else if(res == "hills")
+    {
+        hills += times;
+    }
+    else if (res == "pastures")
+    {
+        pastures += times;
+    }
+    else if(res == "mountains")
+    {
+        mountains += times;
+    }
+    else if(res == "fields")
+    {
+        fields += times;
+    }
+    else{
+        return false;
+    }
+    return true;
+}
+
+int Player::steal_resources(string res){
+    int amount = 0;
+    if (res == "forest")
+    {
+        while (forest > 0)
+        {
+            forest--;
+            amount++;
+        }
+    }
+    else if(res == "hills")
+    {
+        while (hills > 0)
+        {
+            hills--;
+            amount++;
+        }
+    }
+    else if (res == "pastures")
+    {
+        while (pastures > 0)
+        {
+            pastures--;
+            amount++;
+        }
+    }
+    else if(res == "mountains")
+    {
+        while (mountains > 0)
+        {
+            mountains--;
+            amount++;
+        }
+    }
+    else if(res == "fields")
+    {
+        while (fields > 0)
+        {
+            fields--;
+            amount++;
+        }
+    }
+    else{
+        return 0;
+    }
+    return amount;
+}
+
 void Player::get_point(){
     points++;
+}
+
+void Player::print_points(){
+    cout << name + "'s points: " << points << "\n";
 }
 
 void Player::print_resources(){
@@ -247,12 +383,12 @@ void Player::print_resources(){
 }
 
 bool Player::My_turn() {
-    return game->Get_Turn() == name;
+    return game->Get_Turn_name() == name;
 }
 
 void Player::End_turn() {
     if (!My_turn()) {
-        cout << "Not your turn, it is " << game->Get_Turn() << "'s turn\n";
+        cout << "Not your turn, it is " << game->Get_Turn_name() << "'s turn\n";
         return;
     }
     cout << name + " ended hes turn\n";

@@ -207,7 +207,7 @@ void Board::print_board()
     cout<<"                 -.             ::-              -.-              +                 \n";         
     cout <<"                     "<< tiles[0].get_land() <<","<< to_string(tiles[0].get_number());      
     cout <<"        "<< tiles[1].get_land() <<","<< to_string(tiles[1].get_number()); 
-    cout <<"        "<< tiles[2].get_land() <<","<< to_string(tiles[2].get_number())<<"\n"; 
+    cout <<"      "<< tiles[2].get_land() <<","<< to_string(tiles[2].get_number())<<"\n"; 
     cout<<"                 -.             ::-              -.-              +                 \n"; 
     cout<<"                 .-.           :-.:-.           :: -:           .-:                 \n";
     cout<<"                ::  .=.     :-.  -:  :-      --  .=.  -:      =:  ::                \n";

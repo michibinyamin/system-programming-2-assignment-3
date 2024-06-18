@@ -12,6 +12,8 @@
 #include "Tile.hpp"
 #include "DevelopmentCard.hpp"
 #include "VictoryPointCard.hpp"
+#include "MonopolyCard.hpp"
+#include "YearOfPlentyCard.hpp"
 
 class Catan {
 private:
@@ -38,11 +40,17 @@ public:
     // Get the board
     Board* Get_Board();
 
-    // Get turn
-    string Get_Turn();
+    // Get turn name
+    string Get_Turn_name();
+
+    // Get turn number
+    int Get_Turn_number();
 
     // A player roled the dice, players get thyre משאבים
     void Dice_roled(int result);
+
+    // Monopoly
+    int monopoly(Player* p, string res);
 
     // Returns a randome cdevelopment card in the deck
     DevelopmentCard* Get_card();
