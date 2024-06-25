@@ -14,6 +14,7 @@
 #include "VictoryPointCard.hpp"
 #include "MonopolyCard.hpp"
 #include "YearOfPlentyCard.hpp"
+#include "RoadBuilderCard.hpp"
 
 class Catan;
 
@@ -34,7 +35,14 @@ private:
     Catan* game;    // A instance of the game
     bool My_turn(); // Keeps track of whos turn it is
 
-    //DevelopmentCard* Find_in_dec(string card_name);
+    int steal_resources(string res);                // steal all of type res ,For monopoly card
+    //bool steal_resource_k(string res);             // steal one of type res ,For knight card
+    void get_resources(int num);                    // Get the resources of the number (from a dice roll)
+    bool achive_resource(string res, int times);    // receive a resource res x times
+    void get_point();                               // Receive a point
+    bool count_knights();
+    bool three_knights;
+    bool won_game();
 
 public:
     Player(string given_name);
@@ -45,19 +53,24 @@ public:
     }
     void set_num(int n);  // This will be the players id in the game
     string getname();     // Reterns player name
-    void Roll_dice();     // Player rolls dice
+    bool Roll_dice();     // Player rolls dice
     bool Buy_card();      // Player gets a randome card(if he has enogh resources)
-    bool Use_card(string card_name);     // Use a card (Victory point)
+    bool Use_card(string card_name);     // Use a card (Victory point and Road builder)
     bool Use_card(string card_name, string resource1, string resource2);     // Use a card (Year of plenty)
     bool Use_card(string card_name, string resource);     // Use a card (Monopoly)
     bool placeSettelemnt(int position);  // Place a settelment on a position
+    bool placeCity(int position);   // Place a city on a position
     bool placeRoad(int road);            // Place a road on a path
-    void get_resources(int num);         // Get the resources of the number (from a dice roll)
-    int steal_resources(string res);     // For monopoly
-    bool achive_resource(string res, int times);    // receive a resource res x times
     void print_resources();              // Print the players resources
-    void get_point();       // Receive a point
     void print_points();    // Print the player's points
     void End_turn();        // Player chooses to end hes turn, game waits for next players move
+
+    friend class Catan;
+    friend class DevelopmentCard;
+    friend class MonopolyCard;
+    friend class YearOfPlentyCard;
+    friend class VictoryPointCard;
+    friend class RoadBuilderCard;
+    friend class KnightCard;
 };
 #endif  // PLAYER_HPP

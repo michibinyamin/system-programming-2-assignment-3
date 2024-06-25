@@ -13,14 +13,12 @@ Position::Position(int position_number) {
         tiles[i] = nullptr;  // Initialize neighbors with nullptr
         paths[i] = nullptr;  // Initialize neighbors with nullptr
     }
+    owner = 0;
+    city = false;
 }
 
 void Position::set_number(int position_number) {
     position_num = position_number;
-}
-
-void Position::set_owner(int player) {
-    owner = player;
 }
 void Position::set_tiles(Tile* t) {
     for (int i = 0; i < 3; ++i) {
@@ -40,6 +38,20 @@ void Position::set_path(Path& p) {
         }
     }
 }
+
+void Position::set_owner(int player) {
+    owner = player;
+}
+bool Position::set_city(int player){
+    if (owner == player)
+    {
+        city = true;
+        return true;
+    }
+    return false;
+}
+
+
 
 bool Position::has_path(int p) {
     for (int i = 0; i < 3; i++) {
@@ -61,6 +73,10 @@ bool Position::no_neighbors() {
         }
     }
     return true;
+}
+
+bool Position::is_city(){
+    return city;
 }
 
 Path* Position::get_path(int p) {

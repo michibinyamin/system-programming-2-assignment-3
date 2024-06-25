@@ -57,5 +57,7 @@ board :
 player :
 - instance of the board
 
+which librarys i used
+
 
 ![alt text](1000195580.png)

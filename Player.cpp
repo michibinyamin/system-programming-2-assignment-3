@@ -15,13 +15,23 @@ Player::Player(string given_name) : name(given_name) {
     rolled = false;
 
     forest = 0;
-    hills = 0; 
+    hills = 0;
     pastures = 0;
     mountains = 0;
     fields = 0;
+
+    three_knights = false;
 }
 
 Player::~Player() {
+}
+
+bool Player::won_game(){
+    if (points >= 10)
+    {
+        return true;
+    }
+    return false;
 }
 
 void Player::set_num(int n) {
@@ -32,14 +42,14 @@ string Player::getname() {
     return name;
 }
 
-void Player::Roll_dice() {
+bool Player::Roll_dice() {
     if (!My_turn()) {
         cout << "Not your turn, it is " << game->Get_Turn_name() << "'s turn\n";
-        return;
+        return false;
     }
-    if(rolled) {
+    if (rolled) {
         cout << "Can't roll twice in one turn\n";
-        return;
+        return false;
     }
 
     random_device rd;
@@ -51,6 +61,7 @@ void Player::Roll_dice() {
     cout << name << " threw dice. rolled on: " + to_string(result) + "\n";
     rolled = true;
     game->Dice_roled(result);
+    return true;
 }
 
 bool Player::placeSettelemnt(int p) {
@@ -62,8 +73,7 @@ bool Player::placeSettelemnt(int p) {
     Position* position = game->Get_Board()->get_position(p);
     if (settelment < 2) {
         if (game->Get_Board()->set_position_initial(p, player_num)) {
-
-            // Get the position's resources 
+            // Get the position's resources
             for (int i = 0; i < 3; i++) {
                 if (position->get_tiles()[i] != nullptr) {
                     string land = position->get_tiles()[i]->get_land();
@@ -83,7 +93,8 @@ bool Player::placeSettelemnt(int p) {
                 }
             }
 
-            cout << name + " placed settalment succesfully on position -  " << p << "\n";
+            cout << name + " placed settalment succesfully on position -  " << p
+                 << "\n";
             positions.push_back(position);
             settelment++;
             get_point();
@@ -93,16 +104,20 @@ bool Player::placeSettelemnt(int p) {
             return false;
         }
     } else {
-        if (forest < 1 || hills < 1 || pastures < 1 || fields < 1)
-        {
-            cout << "You do not have the required resources to build a settelment\n";
+        if (!rolled) {
+            cout << "You must first roll the dice\n";
             return false;
         }
-        
-        if (game->Get_Board()->set_position(p, player_num)) {  
-            // Todo - add here to check if i have enogh cards to build a sttelment
-            cout << name + " placed settalment succesfully on position -  " << p << "\n";
-            
+        if (forest < 1 || hills < 1 || pastures < 1 || fields < 1) {
+            cout << "You do not have the required resources to build a "
+                    "settelment\n";
+            return false;
+        }
+
+        if (game->Get_Board()->set_position(p, player_num)) {
+            cout << name + " placed settalment succesfully on position -  " << p
+                 << "\n";
+
             forest--;
             hills--;
             pastures--;
@@ -117,6 +132,33 @@ bool Player::placeSettelemnt(int p) {
     }
 }
 
+bool Player::placeCity(int p) {
+    if (!My_turn()) {
+        cout << "Not your turn, it is " << game->Get_Turn_name() << "'s turn\n";
+        return false;
+    }
+    if (!rolled) {
+        cout << "You must first roll the dice\n";
+        return false;
+    }
+    Position* position = game->Get_Board()->get_position(p);
+    if (position->get_owner() != player_num) 
+    {
+        cout << "you do not have a settalment there\n";
+        return false;
+    }
+    if (mountains < 3 || fields < 2) {
+        cout << "You do not have the required resources to build a city\n";
+        return false;
+    }
+    mountains = mountains - 3;
+    fields = fields - 2;
+    position->set_city(player_num);
+    cout << "City set on the position\n";
+    get_point();
+    return true;
+}
+
 bool Player::placeRoad(int p) {
     if (!My_turn()) {
         cout << "Not your turn, it is " << game->Get_Turn_name() << "'s turn\n";
@@ -128,17 +170,19 @@ bool Player::placeRoad(int p) {
             roads++;
             game->Next_Turn();
             return true;
-        }else{
+        } else {
             cout << "cannot place there a road\n";
             return false;
-        } 
-    }
-    else{
+        }
+    } else {
+        if (!rolled) {
+            cout << "You must first roll the dice\n";
+            return false;
+        }
         if (forest < 1 || hills < 1) {
             cout << "You do not have the required resources to build a road\n";
             return false;
-        }
-        else{
+        } else {
             if (game->Get_Board()->set_path(p, player_num)) {
                 cout << name + " placed road succesfully on - " << p << " \n";
                 roads++;
@@ -151,7 +195,8 @@ bool Player::placeRoad(int p) {
     return false;
 }
 
-// Go over all the positions where player has built and receive resources if it is the correct number
+// Go over all the positions where player has built and receive resources if it
+// is the correct number
 void Player::get_resources(int result) {
     bool t = false;
     int old_forest = forest;
@@ -159,8 +204,7 @@ void Player::get_resources(int result) {
     int old_pastures = pastures;
     int old_mountains = mountains;
     int old_fields = fields;
-    for (int i = 0; i < positions.size(); i++)
-    {
+    for (int i = 0; i < positions.size(); i++) {
         Position* p = positions[i];
         for (int j = 0; j < 3; j++) {
             if (p->get_tiles()[j] != nullptr) {
@@ -169,14 +213,29 @@ void Player::get_resources(int result) {
                     string land = p->get_tiles()[j]->get_land();
                     if (land == "forest") {
                         forest++;
+                        if (p->is_city()){
+                            forest++;
+                        }
                     } else if (land == "hills") {
                         hills++;
+                        if (p->is_city()) {
+                            hills++;
+                        }
                     } else if (land == "pastures") {
                         pastures++;
+                        if (p->is_city()) {
+                            pastures++;
+                        }
                     } else if (land == "mountains") {
                         mountains++;
+                        if (p->is_city()) {
+                            mountains++;
+                        }
                     } else if (land == "fields") {
                         fields++;
+                        if (p->is_city()) {
+                            fields++;
+                        }
                     } else {
                         // Do nothing
                     }
@@ -185,12 +244,10 @@ void Player::get_resources(int result) {
         }
     }
     // Print
-    if (t)
-    {
-        cout << name+" recieved : \n";
-        if (old_forest != forest)
-        {
-            cout << forest-old_forest << " forest\n";
+    if (t) {
+        cout << name + " recieved : \n";
+        if (old_forest != forest) {
+            cout << forest - old_forest << " forest\n";
         }
         if (old_hills != hills) {
             cout << hills - old_hills << " hills\n";
@@ -208,9 +265,17 @@ void Player::get_resources(int result) {
 }
 
 bool Player::Buy_card() {
-    if (pastures < 1 || fields < 1 || mountains < 1)
-    {
-        cout << "You do not have the required resources to buy a development card\n";
+    if (!My_turn()) {
+        cout << "Not your turn, it is " << game->Get_Turn_name() << "'s turn\n";
+        return false;
+    }
+    if (!rolled) {
+        cout << "You must first roll the dice\n";
+        return false;
+    }
+    if (pastures < 1 || fields < 1 || mountains < 1) {
+        cout << "You do not have the required resources to buy a development "
+                "card\n";
         return false;
     }
     DevelopmentCard* card = game->Get_card();
@@ -219,19 +284,34 @@ bool Player::Buy_card() {
     return true;
 }
 
-// Used for victory point (more can be added to here)
+// Used for victory point and Road builder (more can be added to here)
 bool Player::Use_card(string card_name) {
-    for (int i = 0; i < Development_cards.size(); i++)
-    {
-        if(Development_cards.at(i)->Get_name() == card_name){
-            if (card_name == "Victory point")
-            {
-                VictoryPointCard* card = dynamic_cast<VictoryPointCard*>(Development_cards.at(i));       // Downcasting
+    if (!My_turn()) {
+        cout << "Not your turn, it is " << game->Get_Turn_name() << "'s turn\n";
+        return false;
+    }
+    for (int i = 0; i < Development_cards.size(); i++) {
+        if (Development_cards.at(i)->Get_name() == card_name) {
+            if (card_name == "Victory point") {
+                VictoryPointCard* card = dynamic_cast<VictoryPointCard*>(Development_cards.at(i));  // Downcasting
                 card->action(this);
-                Development_cards.erase(Development_cards.begin()+i);
+                Development_cards.erase(Development_cards.begin() + i);
                 cout << "Succesfully used " << card_name << " card\n";
+                cout << name + " ended hes turn\n";
+                rolled = false;
+                game->Next_Turn();
                 return true;
-            } else {
+            }else if(card_name == "Road Builder") {
+                RoadBuilderCard* card = dynamic_cast<RoadBuilderCard*>(Development_cards.at(i));  // Downcasting
+                card->action(this);
+                Development_cards.erase(Development_cards.begin() + i);
+                cout << "Succesfully used " << card_name << " card\n";
+                cout << name + " ended hes turn\n";
+                rolled = false;
+                game->Next_Turn();
+                return true;
+            }
+            else {
                 throw runtime_error("Error with deck \n");
             }
         }
@@ -242,20 +322,26 @@ bool Player::Use_card(string card_name) {
 
 // Used for Year of plenty (more can be added to here)
 bool Player::Use_card(string card_name, string resource1, string resource2) {
+    if (!My_turn()) {
+        cout << "Not your turn, it is " << game->Get_Turn_name() << "'s turn\n";
+        return false;
+    }
     for (int i = 0; i < Development_cards.size(); i++) {
         if (Development_cards.at(i)->Get_name() == card_name) {
             if (card_name == "Year of plenty") {
-                YearOfPlentyCard* card = dynamic_cast<YearOfPlentyCard*>(Development_cards.at(i));  // Downcasting
-                if(card->action(this, resource1, resource2)){
+                YearOfPlentyCard* card = dynamic_cast<YearOfPlentyCard*>(
+                    Development_cards.at(i));  // Downcasting
+                if (card->action(this, resource1, resource2)) {
                     Development_cards.erase(Development_cards.begin() + i);
                     cout << "Succesfully used " << card_name << " card\n";
+                    cout << name + " ended hes turn\n";
+                    rolled = false;
+                    game->Next_Turn();
                     return true;
-                }
-                else{
+                } else {
                     return false;
                 }
-                
-                
+
             } else {
                 throw runtime_error("Error with deck");
             }
@@ -267,18 +353,22 @@ bool Player::Use_card(string card_name, string resource1, string resource2) {
 
 // Used for Monopoly (more can be added to here)
 bool Player::Use_card(string card_name, string resource) {
+    if (!My_turn()) {
+        cout << "Not your turn, it is " << game->Get_Turn_name() << "'s turn\n";
+        return false;
+    }
     for (int i = 0; i < Development_cards.size(); i++) {
         if (Development_cards.at(i)->Get_name() == card_name) {
             if (card_name == "Monopoly") {
-                MonopolyCard* card =
-                dynamic_cast<MonopolyCard*>(Development_cards.at(i));  // Downcasting
-                if (card->action(this, resource))
-                {
+                MonopolyCard* card = dynamic_cast<MonopolyCard*>(Development_cards.at(i));  // Downcasting
+                if (card->action(this, resource)) {
                     Development_cards.erase(Development_cards.begin() + i);
                     cout << "Succesfully used " << card_name << " card\n";
+                    cout << name + " ended hes turn\n";
+                    rolled = false;
+                    game->Next_Turn();
                     return true;
-                }
-                else{
+                } else {
                     return false;
                 }
             } else {
@@ -290,92 +380,124 @@ bool Player::Use_card(string card_name, string resource) {
     return false;
 }
 
-bool Player::achive_resource(string res, int times){
-    if (res == "forest")
-    {
+bool Player::achive_resource(string res, int times) {
+    if (res == "forest") {
         forest += times;
-    }
-    else if(res == "hills")
-    {
+    } else if (res == "hills") {
         hills += times;
-    }
-    else if (res == "pastures")
-    {
+    } else if (res == "pastures") {
         pastures += times;
-    }
-    else if(res == "mountains")
-    {
+    } else if (res == "mountains") {
         mountains += times;
-    }
-    else if(res == "fields")
-    {
+    } else if (res == "fields") {
         fields += times;
-    }
-    else{
+    } else {
         return false;
     }
     return true;
 }
 
-int Player::steal_resources(string res){
+int Player::steal_resources(string res) {
     int amount = 0;
-    if (res == "forest")
-    {
-        while (forest > 0)
-        {
+    if (res == "forest") {
+        while (forest > 0) {
             forest--;
             amount++;
         }
-    }
-    else if(res == "hills")
-    {
-        while (hills > 0)
-        {
+    } else if (res == "hills") {
+        while (hills > 0) {
             hills--;
             amount++;
         }
-    }
-    else if (res == "pastures")
-    {
-        while (pastures > 0)
-        {
+    } else if (res == "pastures") {
+        while (pastures > 0) {
             pastures--;
             amount++;
         }
-    }
-    else if(res == "mountains")
-    {
-        while (mountains > 0)
-        {
+    } else if (res == "mountains") {
+        while (mountains > 0) {
             mountains--;
             amount++;
         }
-    }
-    else if(res == "fields")
-    {
-        while (fields > 0)
-        {
+    } else if (res == "fields") {
+        while (fields > 0) {
             fields--;
             amount++;
         }
-    }
-    else{
+    } else {
         return 0;
     }
     return amount;
 }
 
-void Player::get_point(){
+// bool Player::steal_resource_k(string res){
+//     if (res == "forest") {
+//         if (forest > 0){
+//             forest--;
+//             return true;
+//         }    
+//     } else if (res == "hills") {
+//         if (hills > 0) {
+//             hills--;
+//             return true;
+//         }
+//     } else if (res == "pastures") {
+//         if (pastures > 0) {
+//             pastures--;
+//             return true;
+//         }
+//     } else if (res == "mountains") {
+//         if (mountains > 0) {
+//             mountains--;
+//             return true;
+//         }
+//     } else if (res == "fields") {
+//         if (fields > 0) {
+//             fields--;
+//             return true;
+//         }
+//     }
+//     return false;
+// }
+bool Player::count_knights(){
+    int count = 0;
+    for (int i = 0; i < Development_cards.size(); i++)
+    {
+        if (Development_cards[i]->Get_name() == "knight")
+        {
+            count++;
+        }
+    }
+    if (count == 3)
+    {
+        if (!three_knights)
+        {
+            three_knights = true;
+            points = points + 2;
+        }
+        return true;
+    }
+    else{
+        if (three_knights)
+        {
+            points--;
+            three_knights = false;
+        }
+    }
+    return false;
+}
+
+void Player::get_point() {
     points++;
 }
 
-void Player::print_points(){
+void Player::print_points() {
     cout << name + "'s points: " << points << "\n";
 }
 
-void Player::print_resources(){
+void Player::print_resources() {
     cout << "\n" + name + "'s resources:\n";
-    cout << "forest: " + to_string(forest)+"\n";
+    cout << "forest: " + to_string(forest) + "\n";
     cout << "hills: " + to_string(hills) + "\n";
     cout << "pastures: " + to_string(pastures) + "\n";
     cout << "mountains: " + to_string(mountains) + "\n";
@@ -389,6 +511,10 @@ bool Player::My_turn() {
 void Player::End_turn() {
     if (!My_turn()) {
         cout << "Not your turn, it is " << game->Get_Turn_name() << "'s turn\n";
+        return;
+    }
+    if (!rolled) {
+        cout << "You must first roll the dice\n";
         return;
     }
     cout << name + " ended hes turn\n";

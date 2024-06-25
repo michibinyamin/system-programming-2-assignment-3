@@ -110,22 +110,34 @@ int main()
     p2.print_resources();
     p3.print_resources();
 
-
+    p1.Roll_dice();
     p1.placeSettelemnt(50);
     p1.placeRoad(51);
     p1.End_turn();
 
+    p2.Roll_dice();
     p2.placeSettelemnt(39);
     p2.placeRoad(41);
     p2.End_turn();
 
+    p3.Roll_dice();
     p3.placeSettelemnt(41);
     p3.placeRoad(56);
     p3.End_turn();
 
+    p1.Roll_dice();
     p1.print_points();
     p1.Buy_card();
 
+    p1.print_resources();
+    p2.print_resources();
+    p3.print_resources();
+    p1.Use_card("Road Builder");
+    // p1.print_resources();
+    // p2.print_resources();
+    // p3.print_resources();
+
+    p1.End_turn();
 
 
 

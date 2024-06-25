@@ -14,6 +14,8 @@
 #include "VictoryPointCard.hpp"
 #include "MonopolyCard.hpp"
 #include "YearOfPlentyCard.hpp"
+#include "RoadBuilderCard.hpp"
+#include "KnightCard.hpp"
 
 class Catan {
 private:
@@ -23,6 +25,9 @@ private:
     Board* board;
     vector<DevelopmentCard*> DevelopmentCards;
     int turn;
+
+    // Check if the game is finished
+    bool Player_won();
 
 public:
     // Constructor
