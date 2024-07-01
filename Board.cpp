@@ -159,102 +159,64 @@ Path* Board::get_path(int p){
 
 void Board::print_board()
 {
-    cout << "         ";
-    for (int i = 0; i < 3; i++)
-    {
-        
-        cout << tiles[i].get_land() <<","<< to_string(tiles[i].get_number());
-        cout << "  ";
-    }
-    cout << "\n";
-
-    cout << "    ";
-    for (int i = 3; i < 7; i++)
-    {
-        cout << tiles[i].get_land() <<","<< to_string(tiles[i].get_number());
-        cout << "  ";
-    }
-    cout << "\n";
-
-    for (int i = 7; i < 12; i++)
-    {
-        cout << tiles[i].get_land() <<","<< to_string(tiles[i].get_number());
-        cout << "  ";
-    }
-    cout << "\n";
-
-    cout << "    ";
-    for (int i = 12; i < 16; i++)
-    {
-        cout << tiles[i].get_land() <<","<< to_string(tiles[i].get_number());
-        cout << "  ";
-    }
-    cout << "\n";
-    cout << "         ";
-
-    for (int i = 16; i < 19; i++)
-    {
-        cout << tiles[i].get_land() <<","<< to_string(tiles[i].get_number());
-        cout << "  ";
-    }
     cout<<"\n";
 
 
-    cout<<"                       -::::           .::::.           :::::                       \n";                    
-    cout<<"                    -:      .-:     .-.      .=:     :=.      :-                    \n";             
-    cout<<"                 :-             -.-:            .- =.            :-                 \n";             
-    cout<<"                 -.             ::-              -.-              +                 \n";             
-    cout<<"                 -.             ::-              -.-              +                 \n";         
-    cout <<"                     "<< tiles[0].get_land() <<","<< to_string(tiles[0].get_number());      
-    cout <<"        "<< tiles[1].get_land() <<","<< to_string(tiles[1].get_number()); 
-    cout <<"      "<< tiles[2].get_land() <<","<< to_string(tiles[2].get_number())<<"\n"; 
-    cout<<"                 -.             ::-              -.-              +                 \n"; 
-    cout<<"                 .-.           :-.:-.           :: -:           .-:                 \n";
-    cout<<"                ::  .=.     :-.  -:  :-      --  .=.  -:      =:  ::                \n";
-    cout<<"            .:-    -:. .-:-. .:-   .-:. ::::. .:.   ::. .-::: .:-    -:.            \n";
-    cout<<"         .::.         .:: ::.         .::. ::.         .:: .::.         .-.         \n";
-    cout<<"         .              ...              :-              .-:              ..        \n";
-    cout<<"         .              ...              :-              .-:              ..        \n";
-    cout <<"            "<< tiles[3].get_land() <<","<< to_string(tiles[3].get_number());      
-    cout <<"        "<< tiles[4].get_land() <<","<< to_string(tiles[4].get_number()); 
-    cout <<"       "<< tiles[5].get_land() <<","<< to_string(tiles[5].get_number()); 
-    cout <<"      "<< tiles[6].get_land() <<","<< to_string(tiles[6].get_number())<<"\n"; 
-    cout<<"         .              ...              :-              .-:              ..        \n";
+    cout<<"                       .:"<<positions[1].get_owner()<<"::           .:"<<positions[3].get_owner()<<"::.           ::"<<positions[5].get_owner()<<"::                       \n";                    
+    cout<<"                    :"<<paths[0].get_owner()<<"      ."<<paths[1].get_owner()<<":     ."<<paths[2].get_owner()<<".      ."<<paths[3].get_owner()<<":     :"<<paths[4].get_owner()<<".      :"<<paths[5].get_owner()<<"                    \n";             
+    cout<<"                  "<<positions[0].get_owner()<<"             ."<<positions[2].get_owner()<<".:            .."<<positions[4].get_owner()<<" .            :"<<positions[6].get_owner()<<"                 \n";             
+    cout<<"                 ..             ::.              ...              .                 \n";             
+    cout<<"                 ..             ::.              ...              .                 \n";         
+    cout <<"                  "<<paths[6].get_owner()<<"  "<< tiles[0].get_land() <<","<< to_string(tiles[0].get_number());      
+    cout <<"    "<<paths[7].get_owner()<<"   "<< tiles[1].get_land() <<","<< to_string(tiles[1].get_number()); 
+    cout <<"  "<<paths[8].get_owner()<<"   "<< tiles[2].get_land() <<","<< to_string(tiles[2].get_number())<<"  "<<paths[9].get_owner()<<"\n"; 
+    cout<<"                 ..             ::.              ...              .                 \n"; 
+    cout<<"                 ...           :..:..           :: .:           ..:                 \n";
+    cout<<"                ::"<<positions[8].get_owner()<<" ...     :..  "<<positions[10].get_owner()<<":  :.      ..  ."<<positions[12].get_owner()<<".  .:      .:  "<<positions[14].get_owner()<<":                \n";
+    cout<<"            .:"<<paths[10].get_owner()<<"    .:."<<paths[11].get_owner()<<" ..:.. "<<paths[12].get_owner()<<"..   ."<<paths[13].get_owner()<<":. ::::."<<paths[14].get_owner()<<".:.   :"<<paths[15].get_owner()<<". ..:::"<<paths[16].get_owner()<<".:.    "<<paths[17].get_owner()<<":.            \n";
+    cout<<"         "<<positions[7].get_owner()<<"::.         .::"<<positions[9].get_owner()<<"::.         .::"<<positions[11].get_owner()<<" ::.         .::"<<positions[13].get_owner()<<".::.         .."<<positions[15].get_owner()<<"         \n";
+    cout<<"         .              ...              :.              ..:              ..        \n";
+    cout<<"         .              ...              :.              ..:              ..        \n";
+    cout <<"         "<<paths[18].get_owner()<<"  "<< tiles[3].get_land() <<","<< to_string(tiles[3].get_number());      
+    cout <<"   "<<paths[19].get_owner()<<"   "<< tiles[4].get_land() <<","<< to_string(tiles[4].get_number()); 
+    cout <<"    "<<paths[20].get_owner()<<"  "<< tiles[5].get_land() <<","<< to_string(tiles[5].get_number()); 
+    cout <<"  "<<paths[21].get_owner()<<"    "<< tiles[6].get_land() <<","<< to_string(tiles[6].get_number())<<"   "<<paths[22].get_owner()<<"\n"; 
+    cout<<"         .              ...              :.              ..:              ..        \n";
     cout<<"         .              ...              ::.             .::              :.        \n";
-    cout<<"        . .::.       ::. . .::       .::. . ::.       .:: . .::.       ::. .        \n";
-    cout<<"     .-...:- .:-. -:. :-...-: .:: .-:  -:...-. .-. ::. .-. .:- .:- .-:. ::...-:     \n";
-    cout<<" .=.        ::    :-        .=.    -:        .-.   .=.        -:    :-        .=.   \n";
-    cout<<"-              =-.             ::=              -.=              +..             .: \n";
-    cout<<":              --.             ::-              - -              +..             .. \n";
-    cout <<"    "<< tiles[7].get_land() <<","<< to_string(tiles[7].get_number());      
-    cout <<"         "<< tiles[8].get_land() <<","<< to_string(tiles[8].get_number()); 
-    cout <<"        "<< tiles[9].get_land() <<","<< to_string(tiles[9].get_number()); 
-    cout <<"         "<< tiles[10].get_land() <<","<< to_string(tiles[10].get_number()); 
-    cout <<"        "<< tiles[11].get_land() <<","<< to_string(tiles[11].get_number())<<"\n"; 
-    cout<<":              --.             ::-              - -              +..             .. \n";
-    cout<<":              --.             ::-              - -              +..             .. \n";
-    cout<<".-:          -:  :=.         .-.  :-          :-. .-.          -:  :=          .=.  \n";
-    cout<<"   .-:   .-- .:--:. :-.   .-. .:--:  -:.   :-  .-:-. .-:   .-- .:--:. :-.   .-.     \n";
-    cout<<"      .:: .::      ::. .:. .::     .::. ::..::.     .::..:: .::      ::. ::.        \n";
-    cout<<"        :.            .:.:.            .:::            .-::.            .-          \n";
-    cout<<"        .               ..              :-              .-:              ..         \n";
-    cout<<"        .              ...              :-              .-:              ..         \n";
-    cout <<"            "<< tiles[12].get_land() <<","<< to_string(tiles[12].get_number());      
-    cout <<"         "<< tiles[13].get_land() <<","<< to_string(tiles[13].get_number()); 
-    cout <<"       "<< tiles[14].get_land() <<","<< to_string(tiles[14].get_number()); 
-    cout <<"     "<< tiles[15].get_land() <<","<< to_string(tiles[15].get_number())<<"\n"; 
-    cout<<"        .              ...              :-              .-:              ..         \n";
-    cout<<"        ::.           .:.:.           .::.:.           .-.::.          ..:          \n";
-    cout<<"          .::.     ::.:::::.::     .::.::::..::     ::.:::::.::.     ::.            \n";
-    cout<<"              .--: :-.     .-..:-=..-:      .=..---..=.      :-.:=-:                \n";
-    cout<<"                :-            .-.--            :- =.            --                  \n";
-    cout<<"                -.             ::-              - -              +                  \n";
-    cout<<"                -.             ::-              - -              +                  \n";
-    cout <<"                    "<< tiles[16].get_land() <<","<< to_string(tiles[16].get_number());      
-    cout <<"        "<< tiles[17].get_land() <<","<< to_string(tiles[17].get_number()); 
-    cout <<"        "<< tiles[18].get_land() <<","<< to_string(tiles[18].get_number())<<"\n"; 
-    cout<<"                -.             ::-              - -              +                  \n";
-    cout<<"                :-            .-.::            :- -.            --                  \n";
-    cout<<"                   .-      .=.      --      :=.     .=:      --                     \n";
-    cout<<"                      :::-.            :::-.           .-:::                        \n";
+    cout<<"        ."<<positions[17].get_owner()<<".::.       ::. "<<positions[19].get_owner()<<" .::       .::."<<positions[21].get_owner()<<"  ::.       .:: "<<positions[23].get_owner()<<" .::.       ::."<<positions[25].get_owner()<<".        \n";
+    cout<<"     "<<paths[23].get_owner()<<"....:. "<<paths[24].get_owner()<<":.. .:."<<paths[25].get_owner()<<":....."<<paths[26].get_owner()<<" .:: ..:"<<paths[27].get_owner()<<" .:...."<<paths[28].get_owner()<<" ... ::."<<paths[29].get_owner()<<"... .: "<<paths[30].get_owner()<<".:. ..:"<<paths[31].get_owner()<<" ::...."<<paths[32].get_owner()<<"     \n";
+    cout<<positions[16].get_owner()<<"...        ::  "<<positions[18].get_owner()<<" :.        ... "<<positions[20].get_owner()<<"  .:        ... "<<positions[22].get_owner()<<" ...        .:  "<<positions[24].get_owner()<<" :.        ... "<<positions[26].get_owner()<<"  \n";
+    cout<<".              ...             ::.              ...              ...             .: \n";
+    cout<<":              ...             ::.              . .              ...             .. \n";
+    cout<<paths[33].get_owner()<<"   "<< tiles[7].get_land() <<","<< to_string(tiles[7].get_number());      
+    cout <<"    "<<paths[34].get_owner()<<"    "<< tiles[8].get_land() <<","<< to_string(tiles[8].get_number()); 
+    cout <<"    "<<paths[35].get_owner()<<"   "<< tiles[9].get_land() <<","<< to_string(tiles[9].get_number()); 
+    cout <<"     "<<paths[36].get_owner()<<"   "<< tiles[10].get_land() <<","<< to_string(tiles[10].get_number()); 
+    cout <<"     "<<paths[37].get_owner()<<"  "<< tiles[11].get_land() <<","<< to_string(tiles[11].get_number())<<"    "<<paths[38].get_owner()<<"\n"; 
+    cout<<":              ...             ::.              . .              ...             .. \n";
+    cout<<":              ...             ::.              . .              ...             .. \n";
+    cout<<positions[27].get_owner()<<".:          .: "<<positions[29].get_owner()<<":..         ..."<<positions[31].get_owner()<<" :.          :.."<<positions[33].get_owner()<<"...          .: "<<positions[35].get_owner()<<":.          ..."<<positions[37].get_owner()<<" \n";
+    cout<<"   ."<<paths[39].get_owner()<<":   ..."<<paths[40].get_owner()<<".:..:. "<<paths[41].get_owner()<<"..   ..."<<paths[42].get_owner()<<".:..: "<<paths[43].get_owner()<<".:.   :."<<paths[44].get_owner()<<" ..:.. "<<paths[45].get_owner()<<".:   ..."<<paths[46].get_owner()<<".:..:. "<<paths[47].get_owner()<<"..   .."<<paths[48].get_owner()<<"     \n";
+    cout<<"      .:"<<positions[28].get_owner()<<" .::      ::. ."<<positions[30].get_owner()<<". .::     .::. "<<positions[32].get_owner()<<":..::.     .::.."<<positions[34].get_owner()<<": .::      ::. :"<<positions[36].get_owner()<<".        \n";
+    cout<<"        :.            .:.:.            .:::            ..::.            ..          \n";
+    cout<<"        .              ...              :.              ..:              ..         \n";
+    cout <<"        "<<paths[49].get_owner()<<"   "<< tiles[12].get_land() <<","<< to_string(tiles[12].get_number());      
+    cout <<"     "<<paths[50].get_owner()<<"   "<< tiles[13].get_land() <<","<< to_string(tiles[13].get_number()); 
+    cout <<"  "<<paths[51].get_owner()<<"   "<< tiles[14].get_land() <<","<< to_string(tiles[14].get_number()); 
+    cout <<"  "<<paths[52].get_owner()<<"  "<< tiles[15].get_land() <<","<< to_string(tiles[15].get_number())<<"  "<<paths[53].get_owner()<<"\n"; 
+    cout<<"        .               ..              :.              ..:              ..         \n";
+    cout<<"        .              ...              :.              ..:              ..         \n";
+    cout<<"        "<<positions[38].get_owner()<<":.           .:"<<positions[40].get_owner()<<":.           .:"<<positions[42].get_owner()<<".:.           .."<<positions[44].get_owner()<<"::.          ..:"<<positions[46].get_owner()<<"         \n";
+    cout<<"          .:"<<paths[54].get_owner()<<"..     "<<paths[55].get_owner()<<"..:::::"<<paths[56].get_owner()<<".:     "<<paths[57].get_owner()<<".:.::::"<<paths[58].get_owner()<<".::     "<<paths[59].get_owner()<<"..:::::"<<paths[60].get_owner()<<".:.    "<<paths[61].get_owner()<<"..            \n";
+    cout<<"              .."<<positions[39].get_owner()<<": :..     ....:"<<positions[41].get_owner()<<"....:      ....."<<positions[43].get_owner()<<".....      :..:"<<positions[45].get_owner()<<".:                \n";
+    cout<<"                :.            .....            :. ..            ..                  \n";
+    cout<<"                ..             ::.              . .              .                  \n";
+    cout <<"                "<<paths[62].get_owner()<<"   "<< tiles[16].get_land() <<","<< to_string(tiles[16].get_number());      
+    cout <<"    "<<paths[63].get_owner()<<"   "<< tiles[17].get_land() <<","<< to_string(tiles[17].get_number()); 
+    cout <<"    "<<paths[64].get_owner()<<"    "<< tiles[18].get_land() <<","<< to_string(tiles[18].get_number())<<"    "<<paths[65].get_owner()<<"\n"; 
+    cout<<"                ..             ::.              . .              .                  \n";
+    cout<<"                ..             ::.              . .              .                  \n";
+    cout<<"                "<<positions[47].get_owner()<<".            .."<<positions[49].get_owner()<<"::            :."<<positions[51].get_owner()<<"..            ."<<positions[53].get_owner()<<"                  \n";
+    cout<<"                   "<<paths[66].get_owner()<<".      .."<<paths[67].get_owner()<<"      "<<paths[68].get_owner()<<".      :"<<paths[69].get_owner()<<".     ."<<paths[70].get_owner()<<":      ."<<paths[71].get_owner()<<"                     \n";
+    cout<<"                      :."<<positions[48].get_owner()<<".:            :"<<positions[50].get_owner()<<":..           .."<<positions[52].get_owner()<<"::                        \n";
     }

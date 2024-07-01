@@ -41,6 +41,14 @@ Catan::Catan(Player* p1, Player* p2, Player* p3, Tile* new_tiles) {
     turn = 1;  // Player one starts
 }
 
+Catan::~Catan(){
+    // Free cards
+    for (auto C : DevelopmentCards)
+    {
+        delete C;
+    }
+}
+
 bool Catan::Player_won() {
     if (turn == 1 && player1->won_game()) {
         cout << player1->getname() << " Won the game";
@@ -59,6 +67,12 @@ void Catan::Dice_roled(int result) {
     player1->get_resources(result);
     player2->get_resources(result);
     player3->get_resources(result);
+    if (result == 7)
+    {
+        player1->seven_rolled();
+        player2->seven_rolled();
+        player3->seven_rolled();
+    }
 }
 
 void Catan::Next_Turn() {
@@ -111,5 +125,21 @@ Board* Catan::Get_Board() {
     return board;
 }
 
-Catan::~Catan() {
+void Catan::PrintWinner(){
+    if (player1->won_game())
+    {
+        cout << player1->getname() << " won the game\n";
+        return;
+    }
+    if (player2->won_game())
+    {
+        cout << player2->getname() << " won the game\n";
+        return;
+    }
+    if (player3->won_game())
+    {
+        cout << player3->getname() << " won the game\n";
+        return;
+    }
+    cout << "no one wins\n";
 }

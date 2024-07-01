@@ -5,7 +5,7 @@
 #include "Player.hpp"
 #include "RoadBuilderCard.hpp"
 
-RoadBuilderCard::RoadBuilderCard(Catan* g) : DevelopmentCard("Road Builder", g) {
+RoadBuilderCard::RoadBuilderCard(Catan* g) : DevelopmentCard("Road builder", g) {
 }
 
 void RoadBuilderCard::action(Player* p) {

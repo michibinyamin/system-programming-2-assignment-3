@@ -19,8 +19,7 @@ protected:
 
 public:
     DevelopmentCard(string name, Catan* g);
-    string Get_action();         // Returns the description of what the card can do
-    string Get_name();           // Returns the name of the card
+    string Get_name();                   // Returns the name of the card
     virtual void print_card();           // Prints the type and name of card it is and action it does
 };
 

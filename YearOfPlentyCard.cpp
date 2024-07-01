@@ -9,13 +9,13 @@ YearOfPlentyCard::YearOfPlentyCard(Catan* g): DevelopmentCard("Year of plenty", 
 }
 
 bool YearOfPlentyCard::action(Player* p, string resource1, string resource2) {
-    if (resource1 != "forest" || resource1 != "mountains" ||
-        resource1 != "hills" || resource1 != "fields" ||
+    if (resource1 != "forest" && resource1 != "mountains" &&
+        resource1 != "hills" && resource1 != "fields" &&
         resource1 != "pasture") {
         return false;
     }
-    if (resource2 != "forest" || resource2 != "mountains" ||
-        resource2 != "hills" || resource2 != "fields" ||
+    if (resource2 != "forest" && resource2 != "mountains" &&
+        resource2 != "hills" && resource2 != "fields" &&
         resource2 != "pasture") {
         return false;
     }

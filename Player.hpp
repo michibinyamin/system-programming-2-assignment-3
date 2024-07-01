@@ -36,12 +36,18 @@ private:
     bool My_turn(); // Keeps track of whos turn it is
 
     int steal_resources(string res);                // steal all of type res ,For monopoly card
+    DevelopmentCard* take_development_card(string card);    // For trade
+    void get_develpoment_card(DevelopmentCard* card);       // For trade
     //bool steal_resource_k(string res);             // steal one of type res ,For knight card
     void get_resources(int num);                    // Get the resources of the number (from a dice roll)
     bool achive_resource(string res, int times);    // receive a resource res x times
     void get_point();                               // Receive a point
     bool count_knights();
     bool three_knights;
+    bool has_development_card(string card);
+    bool legal_trade(Player* p, string card, string card2); // Checks if this trade is legal
+    bool trade_development_card(string dev);                // steal one development card ,for trade
+    void seven_rolled();                                    // if there is more then 7 resources then it will remove half
     bool won_game();
 
 public:
@@ -57,9 +63,10 @@ public:
     bool Buy_card();      // Player gets a randome card(if he has enogh resources)
     bool Use_card(string card_name);     // Use a card (Victory point and Road builder)
     bool Use_card(string card_name, string resource1, string resource2);     // Use a card (Year of plenty)
-    bool Use_card(string card_name, string resource);     // Use a card (Monopoly)
+    bool Use_card(string card_name, string resource);      // Use a card (Monopoly)
+    bool trade(Player* p, string card, string card2);      // Trade cards, card = he's card to exchange, card2 = my card
     bool placeSettelemnt(int position);  // Place a settelment on a position
-    bool placeCity(int position);   // Place a city on a position
+    bool placeCity(int position);        // Place a city on a position
     bool placeRoad(int road);            // Place a road on a path
     void print_resources();              // Print the players resources
     void print_points();    // Print the player's points
@@ -72,5 +79,7 @@ public:
     friend class VictoryPointCard;
     friend class RoadBuilderCard;
     friend class KnightCard;
+
+    friend class Test;    // For testing
 };
 #endif  // PLAYER_HPP

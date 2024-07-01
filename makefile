@@ -1,27 +1,3 @@
-# CC = clang++
-# CFLAGS = -Wall -std=c++17
-
-# SRCS = Board.cpp Catan.cpp Path.cpp Player.cpp Position.cpp Tile.cpp DevelopmentCard.cpp VictoryPointCard.cpp MonopolyCard.cpp YearOfPlentyCard.cpp main.cpp
-# OBJS = $(SRCS:.cpp=.o)
-# OUT = Catan
-
-# all: $(OUT)
-
-# $(OUT): $(OBJS)
-# 	$(CC) $(CFLAGS) -o $(OUT) $(OBJS)
-
-# %.o: %.cpp
-# 	$(CC) $(CFLAGS) -c $<
-
-# clean:
-# 	rm -f $(OBJS) $(OUT)
-
-
-# ID - 208768978
-# GMAIL - michibinyamin@gmail.com
-
-#!make -f
-
 CXX=clang++
 CXXFLAGS=-std=c++11 
 VALGRIND_FLAGS=-v -g --leak-check=full --show-leak-kinds=all  --error-exitcode=99
@@ -29,7 +5,7 @@ VALGRIND_FLAGS=-v -g --leak-check=full --show-leak-kinds=all  --error-exitcode=9
 SOURCES=Board.cpp Catan.cpp Path.cpp Player.cpp Position.cpp Tile.cpp DevelopmentCard.cpp VictoryPointCard.cpp MonopolyCard.cpp YearOfPlentyCard.cpp RoadBuilderCard.cpp KnightCard.cpp TestCounter.cpp Test.cpp
 OBJECTS=$(subst .cpp,.o,$(SOURCES))
 
-run: main
+catan: main
 	./$^
 
 main: main.o $(filter-out TestCounter.o Test.o,$(OBJECTS))

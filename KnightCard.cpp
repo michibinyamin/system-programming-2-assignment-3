@@ -9,7 +9,6 @@ KnightCard::KnightCard(Catan* g) : DevelopmentCard("Knight", g) {
 }
 
 bool KnightCard::action(Player* p) {
-    // Add option to call count knights to all of the players
     p->count_knights(); 
     return false;
 }

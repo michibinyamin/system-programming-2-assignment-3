@@ -133,13 +133,11 @@ int main()
     p2.print_resources();
     p3.print_resources();
     p1.Use_card("Road Builder");
-    // p1.print_resources();
-    // p2.print_resources();
-    // p3.print_resources();
+    game->Get_Board()->print_board();
 
     p1.End_turn();
-
-
+    game->PrintWinner();
+    // more examples are used inside the tests
 
     // bool switch_turn = true;
 
